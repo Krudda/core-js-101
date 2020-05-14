@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable max-len */
+/* eslint-disable no-console */
 /* *******************************************************************************************
  *                                                                                           *
  * Plese read the following tutorial before implementing tasks:                              *
@@ -161,8 +164,8 @@ function unbracketTag(str) {
  *   'Thunderstruck' => 'THUNDERSTRUCK'
  *  'abcdefghijklmnopqrstuvwxyz' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
  */
-function convertToUpperCase(/* str */) {
-  throw new Error('Not implemented');
+function convertToUpperCase(str) {
+  return str.toUpperCase();
 }
 
 /**
@@ -180,102 +183,122 @@ function convertToUpperCase(/* str */) {
  *   ],
  *   'info@gmail.com' => ['info@gmail.com']
  */
-function extractEmails(/* str */) {
-  throw new Error('Not implemented');
+function extractEmails(str) {
+  return str.split(';');
 }
-
 /**
- * Returns the string representation of rectangle with specified width and height
- * using pseudograhic chars
- *
- * @param {number} width
- * @param {number} height
- * @return {string}
- *
- * @example
- *
- *            '┌────┐\n'+
- *  (6,4) =>  '│    │\n'+
- *            '│    │\n'+
- *            '└────┘\n'
- *
- *  (2,2) =>  '┌┐\n'+
- *            '└┘\n'
- *
- *             '┌──────────┐\n'+
- *  (12,3) =>  '│          │\n'+
- *             '└──────────┘\n'
- *
- */
+   * Returns the string representation of rectangle with specified width and height
+   * using pseudograhic chars
+   *
+   * @param {number} width
+   * @param {number} height
+   * @return {string}
+   *
+   * @example
+   *
+   *            '┌────┐\n'+
+   *  (6,4) =>  '│    │\n'+
+   *            '│    │\n'+
+   *            '└────┘\n'
+   *
+   *  (2,2) =>  '┌┐\n'+
+   *            '└┘\n'
+   *
+   *             '┌──────────┐\n'+
+   *  (12,3) =>  '│          │\n'+
+   *             '└──────────┘\n'
+   *
+   */
 function getRectangleString(/* width, height */) {
   throw new Error('Not implemented');
 }
 
 
 /**
- * Encode specified string with ROT13 cipher
- * See details:  https://en.wikipedia.org/wiki/ROT13
- *
- * @param {string} str
- * @return {string}
- *
- * @example
- *
- *   'hello' => 'uryyb'
- *   'Why did the chicken cross the road?' => 'Jul qvq gur puvpxra pebff gur ebnq?'
- *   'Gb trg gb gur bgure fvqr!' => 'To get to the other side!'
- *   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
- *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
- *
- */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+   * Encode specified string with ROT13 cipher
+   * See details:  https://en.wikipedia.org/wiki/ROT13
+   *
+   * @param {string} str
+   * @return {string}
+   *
+   * @example
+   *
+   *   'hello' => 'uryyb'
+   *   'Why did the chicken cross the road?' => 'Jul qvq gur puvpxra pebff gur ebnq?'
+   *   'Gb trg gb gur bgure fvqr!' => 'To get to the other side!'
+   *          'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+   *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
+   *
+   */
+function encodeToRot13(str) {
+  const alpbArr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+
+  const res = [];
+  // eslint-disable-next-line no-restricted-syntax
+  for (const char of str) {
+    if (!alpbArr.includes(char)) {
+      res.push(char);
+    }
+    alpbArr.forEach((element, i) => {
+      if (element === char && i < (alpbArr.length / 2)) {
+        (i + 13 < (alpbArr.length / 2)) ? res.push(alpbArr[i + 13]) : res.push(alpbArr[39 - (alpbArr.length - i)]);
+      } else if (element === char && i >= 26) {
+        (i + 13 < alpbArr.length) ? res.push(alpbArr[i + 13]) : res.push(alpbArr[39 - (alpbArr.length - i)]);
+      }
+    });
+  }
+  return res.join('');
 }
 
+
 /**
- * Returns true if the value is string; otherwise false.
- * @param {string} value
- * @return {boolean}
- *
- * @example
- *   isString() => false
- *   isString(null) => false
- *   isString([]) => false
- *   isString({}) => false
- *   isString('test') => true
- *   isString(new String('test')) => true
- */
-function isString(/* value */) {
-  throw new Error('Not implemented');
+   * Returns true if the value is string; otherwise false.
+   * @param {string} value
+   * @return {boolean}
+   *
+   * @example
+   *   isString() => false
+   *   isString(null) => false
+   *   isString([]) => false
+   *   isString({}) => false
+   *   isString('test') => true
+   *   isString(new String('test')) => true
+   */
+function isString(value) {
+  if (value && (typeof (value) === 'string' || typeof (value.valueOf()) === 'string')) {
+    return true;
+  }
+  return false;
 }
 
 
 /**
- * Returns playid card id.
- *
- * Playing cards inittial deck inclides the cards in the following order:
- *
- *  'A♣','2♣','3♣','4♣','5♣','6♣','7♣','8♣','9♣','10♣','J♣','Q♣','K♣',
- *  'A♦','2♦','3♦','4♦','5♦','6♦','7♦','8♦','9♦','10♦','J♦','Q♦','K♦',
- *  'A♥','2♥','3♥','4♥','5♥','6♥','7♥','8♥','9♥','10♥','J♥','Q♥','K♥',
- *  'A♠','2♠','3♠','4♠','5♠','6♠','7♠','8♠','9♠','10♠','J♠','Q♠','K♠'
- *
- * (see https://en.wikipedia.org/wiki/Standard_52-card_deck)
- * Function returns the zero-based index of specified card in the initial deck above.
- *
- * @param {string} value
- * @return {number}
- *
- * @example
- *   'A♣' => 0
- *   '2♣' => 1
- *   '3♣' => 2
- *     ...
- *   'Q♠' => 50
- *   'K♠' => 51
- */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+   * Returns playid card id.
+   *
+   * Playing cards inittial deck inclides the cards in the following order:
+   *
+   *  'A♣','2♣','3♣','4♣','5♣','6♣','7♣','8♣','9♣','10♣','J♣','Q♣','K♣',
+   *  'A♦','2♦','3♦','4♦','5♦','6♦','7♦','8♦','9♦','10♦','J♦','Q♦','K♦',
+   *  'A♥','2♥','3♥','4♥','5♥','6♥','7♥','8♥','9♥','10♥','J♥','Q♥','K♥',
+   *  'A♠','2♠','3♠','4♠','5♠','6♠','7♠','8♠','9♠','10♠','J♠','Q♠','K♠'
+   *
+   * (see https://en.wikipedia.org/wiki/Standard_52-card_deck)
+   * Function returns the zero-based index of specified card in the initial deck above.
+   *
+   * @param {string} value
+   * @return {number}
+   *
+   * @example
+   *   'A♣' => 0
+   *   '2♣' => 1
+   *   '3♣' => 2
+   *     ...
+   *   'Q♠' => 50
+   *   'K♠' => 51
+   */
+function getCardId(value) {
+  const desc = ['A♣', '2♣', '3♣', '4♣', '5♣', '6♣', '7♣', '8♣', '9♣', '10♣', 'J♣', 'Q♣', 'K♣', 'A♦', '2♦', '3♦', '4♦', '5♦', '6♦', '7♦', '8♦', '9♦', '10♦', 'J♦', 'Q♦', 'K♦', 'A♥', '2♥', '3♥', '4♥', '5♥', '6♥', '7♥', '8♥', '9♥', '10♥', 'J♥', 'Q♥', 'K♥', 'A♠', '2♠', '3♠', '4♠', '5♠', '6♠', '7♠', '8♠', '9♠', '10♠', 'J♠', 'Q♠', 'K♠'];
+  return desc.indexOf(value);
 }
 
 
