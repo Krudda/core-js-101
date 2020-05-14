@@ -68,8 +68,8 @@ function getStringFromTemplate(firstName, lastName) {
  *   'Hello, John Doe!' => 'John Doe'
  *   'Hello, Chuck Norris!' => 'Chuck Norris'
  */
-function extractNameFromTemplate(/* value */) {
-  throw new Error('Not implemented');
+function extractNameFromTemplate(value) {
+  return value.replace('Hello, ', '').replace('!', '');
 }
 
 
@@ -131,8 +131,9 @@ function repeatString(value, count) {
  *   'I like legends', 'end' => 'I like legs',
  *   'ABABAB','BA' => 'ABAB'
  */
-function removeFirstOccurrences(/* str, value */) {
-  throw new Error('Not implemented');
+function removeFirstOccurrences(str, value) {
+  const regExp = new RegExp(`${value}`);
+  return str.replace(regExp, '');
 }
 
 /**
@@ -196,40 +197,53 @@ function extractEmails(str) {
    *
    * @example
    *
-   *            '┌────┐\n'+
-   *  (6,4) =>  '│    │\n'+
-   *            '│    │\n'+
-   *            '└────┘\n'
+   *                  '┌────┐\n'+
+   *  (6,4) =>   '│          │\n'+
+   *                  '│          │\n'+
+   *                  '└────┘\n'
    *
    *  (2,2) =>  '┌┐\n'+
    *            '└┘\n'
    *
-   *             '┌──────────┐\n'+
-   *  (12,3) =>  '│          │\n'+
-   *             '└──────────┘\n'
+   *                    '┌──────────┐\n'+
+   *  (12,3) =>  '│                         │\n'+
+   *                    '└──────────┘\n'
    *
    */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  let res = '';
+  for (let i = 1; i <= height; i += 1) {
+    if (i === 1) res += '┌';
+    else if (i < height) res += '│';
+    else if (i === height) res += '└';
+
+    for (let j = 1; j <= width; j += 1) {
+      if ((j < width - 1 && i === 1) || (j < width - 1 && i === height)) res += '─';
+      else if (j < width - 1 && i !== 1) res += ' ';
+      else if (j === width && i === 1) res += '┐\n';
+      else if (j === width && i !== 1 && i !== height) res += '│\n';
+      else if (j === width && i === height) res += '┘\n';
+    }
+  }
+  return res;
 }
 
-
 /**
-   * Encode specified string with ROT13 cipher
-   * See details:  https://en.wikipedia.org/wiki/ROT13
-   *
-   * @param {string} str
-   * @return {string}
-   *
-   * @example
-   *
-   *   'hello' => 'uryyb'
-   *   'Why did the chicken cross the road?' => 'Jul qvq gur puvpxra pebff gur ebnq?'
-   *   'Gb trg gb gur bgure fvqr!' => 'To get to the other side!'
-   *          'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-   *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
-   *
-   */
+     * Encode specified string with ROT13 cipher
+     * See details:  https://en.wikipedia.org/wiki/ROT13
+     *
+     * @param {string} str
+     * @return {string}
+     *
+     * @example
+     *
+     *   'hello' => 'uryyb'
+     *   'Why did the chicken cross the road?' => 'Jul qvq gur puvpxra pebff gur ebnq?'
+     *   'Gb trg gb gur bgure fvqr!' => 'To get to the other side!'
+     *          'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+     *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
+     *
+     */
 function encodeToRot13(str) {
   const alpbArr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
 
@@ -252,18 +266,18 @@ function encodeToRot13(str) {
 
 
 /**
-   * Returns true if the value is string; otherwise false.
-   * @param {string} value
-   * @return {boolean}
-   *
-   * @example
-   *   isString() => false
-   *   isString(null) => false
-   *   isString([]) => false
-   *   isString({}) => false
-   *   isString('test') => true
-   *   isString(new String('test')) => true
-   */
+     * Returns true if the value is string; otherwise false.
+     * @param {string} value
+     * @return {boolean}
+     *
+     * @example
+     *   isString() => false
+     *   isString(null) => false
+     *   isString([]) => false
+     *   isString({}) => false
+     *   isString('test') => true
+     *   isString(new String('test')) => true
+     */
 function isString(value) {
   if (value && (typeof (value) === 'string' || typeof (value.valueOf()) === 'string')) {
     return true;
@@ -273,29 +287,29 @@ function isString(value) {
 
 
 /**
-   * Returns playid card id.
-   *
-   * Playing cards inittial deck inclides the cards in the following order:
-   *
-   *  'A♣','2♣','3♣','4♣','5♣','6♣','7♣','8♣','9♣','10♣','J♣','Q♣','K♣',
-   *  'A♦','2♦','3♦','4♦','5♦','6♦','7♦','8♦','9♦','10♦','J♦','Q♦','K♦',
-   *  'A♥','2♥','3♥','4♥','5♥','6♥','7♥','8♥','9♥','10♥','J♥','Q♥','K♥',
-   *  'A♠','2♠','3♠','4♠','5♠','6♠','7♠','8♠','9♠','10♠','J♠','Q♠','K♠'
-   *
-   * (see https://en.wikipedia.org/wiki/Standard_52-card_deck)
-   * Function returns the zero-based index of specified card in the initial deck above.
-   *
-   * @param {string} value
-   * @return {number}
-   *
-   * @example
-   *   'A♣' => 0
-   *   '2♣' => 1
-   *   '3♣' => 2
-   *     ...
-   *   'Q♠' => 50
-   *   'K♠' => 51
-   */
+     * Returns playid card id.
+     *
+     * Playing cards inittial deck inclides the cards in the following order:
+     *
+     *  'A♣','2♣','3♣','4♣','5♣','6♣','7♣','8♣','9♣','10♣','J♣','Q♣','K♣',
+     *  'A♦','2♦','3♦','4♦','5♦','6♦','7♦','8♦','9♦','10♦','J♦','Q♦','K♦',
+     *  'A♥','2♥','3♥','4♥','5♥','6♥','7♥','8♥','9♥','10♥','J♥','Q♥','K♥',
+     *  'A♠','2♠','3♠','4♠','5♠','6♠','7♠','8♠','9♠','10♠','J♠','Q♠','K♠'
+     *
+     * (see https://en.wikipedia.org/wiki/Standard_52-card_deck)
+     * Function returns the zero-based index of specified card in the initial deck above.
+     *
+     * @param {string} value
+     * @return {number}
+     *
+     * @example
+     *   'A♣' => 0
+     *   '2♣' => 1
+     *   '3♣' => 2
+     *     ...
+     *   'Q♠' => 50
+     *   'K♠' => 51
+     */
 function getCardId(value) {
   const desc = ['A♣', '2♣', '3♣', '4♣', '5♣', '6♣', '7♣', '8♣', '9♣', '10♣', 'J♣', 'Q♣', 'K♣', 'A♦', '2♦', '3♦', '4♦', '5♦', '6♦', '7♦', '8♦', '9♦', '10♦', 'J♦', 'Q♦', 'K♦', 'A♥', '2♥', '3♥', '4♥', '5♥', '6♥', '7♥', '8♥', '9♥', '10♥', 'J♥', 'Q♥', 'K♥', 'A♠', '2♠', '3♠', '4♠', '5♠', '6♠', '7♠', '8♠', '9♠', '10♠', 'J♠', 'Q♠', 'K♠'];
   return desc.indexOf(value);
