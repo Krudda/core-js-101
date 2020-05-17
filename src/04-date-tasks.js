@@ -19,8 +19,8 @@
  *    'Tue, 26 Jan 2016 13:48:02 GMT' => Date()
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
-function parseDataFromRfc2822(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromRfc2822(value) {
+  return new Date(value);
 }
 
 /**
@@ -34,8 +34,8 @@ function parseDataFromRfc2822(/* value */) {
  *    '2016-01-19T16:07:37+00:00'    => Date()
  *    '2016-01-19T08:07:37Z' => Date()
  */
-function parseDataFromIso8601(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromIso8601(value) {
+  return new Date(value);
 }
 
 
@@ -53,8 +53,15 @@ function parseDataFromIso8601(/* value */) {
  *    Date(2012,1,1)    => true
  *    Date(2015,1,1)    => false
  */
-function isLeapYear(/* date */) {
-  throw new Error('Not implemented');
+function isLeapYear(date) {
+  const year = date.getFullYear();
+  let leapYear = false;
+  if (year % 4 !== 0) leapYear = false;
+  if (year % 4 === 0 && year % 100 !== 0) leapYear = true;
+  if (year % 4 === 0 && year % 100 === 0 && year % 400 === 0) leapYear = true;
+
+
+  return leapYear;
 }
 
 
@@ -73,8 +80,31 @@ function isLeapYear(/* date */) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,0,0,250)     => "00:00:00.250"
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
-function timeSpanToString(/* startDate, endDate */) {
-  throw new Error('Not implemented');
+function timeSpanToString(startDate, endDate) {
+  const milliseconds = endDate - startDate;
+
+  const hours = milliseconds / (1000 * 60 * 60);
+  const absoluteHours = Math.floor(hours);
+  const h = absoluteHours > 9 ? absoluteHours : `0${absoluteHours}`;
+
+  const minutes = (hours - absoluteHours) * 60;
+  const absoluteMinutes = Math.floor(minutes);
+  const m = absoluteMinutes > 9 ? absoluteMinutes : `0${absoluteMinutes}`;
+
+  const seconds = (minutes - absoluteMinutes) * 60;
+  const absoluteSeconds = Math.floor(seconds);
+  const s = absoluteSeconds > 9 ? absoluteSeconds : `0${absoluteSeconds}`;
+
+  const milliS = (seconds - absoluteSeconds) * 1000;
+  const absoluteMilliSeconds = Math.floor(milliS);
+
+  let ms;
+  if (absoluteMilliSeconds > 99) ms = absoluteMilliSeconds;
+  if (absoluteMilliSeconds > 9 && milliS < 99) ms = `0${absoluteMilliSeconds}`;
+  if (absoluteMilliSeconds <= 9) ms = `00${absoluteMilliSeconds}`;
+
+
+  return `${h}:${m}:${s}.${ms}`;
 }
 
 
